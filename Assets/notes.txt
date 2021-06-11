@@ -1,0 +1,19 @@
+theme: joined together
+ideas:
+
+physically stuck together (string, glue, etc)
+one controls the other ?
+you are attached to the map/something in the environment
+you would link env together to win
+
+name: You Control Two
+mechanic: you control two players
+goal: get to endpoint
+additions:
+belts - push character in predfined direction
+portals - teleport character in between them
+spikes - kills character/resets progress (?)
+checkpoints (?) - adds new respawn point
+keys/doors (?) - collect key and use it to open corrosponding door
+buttons (?) - activate stuff (enable spikes, open doors, etc)
+? - may not impliment if there's not enough time
