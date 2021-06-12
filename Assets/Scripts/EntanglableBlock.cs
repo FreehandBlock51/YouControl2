@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EntanglableBlock : MonoBehaviour
 {
+    public new Rigidbody2D rigidbody => GetComponent<Rigidbody2D>();
     static EntanglableBlock searching;
     static uint entangledBlocks = 0;
 
@@ -11,7 +12,7 @@ public class EntanglableBlock : MonoBehaviour
 
     public EntanglableBlock entangledWith;
     public bool entangled;
-    Vector3 distance;
+    Vector2 distance;
     public bool isMoving;
 
     // Start is called before the first frame update
@@ -34,7 +35,7 @@ public class EntanglableBlock : MonoBehaviour
         }
         else if (entangled && entangledWith && isMoving)
         {
-            entangledWith.transform.position = transform.position + distance;
+            entangledWith.rigidbody.MovePosition(rigidbody.position + distance);
         }
         else if (!entangled || !entangledWith)
         {
@@ -85,8 +86,8 @@ public class EntanglableBlock : MonoBehaviour
                 entangledWith = searching;
                 searching = null;
                 entangledWith.entangledWith = this;
-                distance = entangledWith.transform.position - transform.position;
-                entangledWith.distance = transform.position - entangledWith.transform.position;
+                distance = entangledWith.rigidbody.position - rigidbody.position;
+                entangledWith.distance = rigidbody.position - entangledWith.rigidbody.position;
             }
         }
         else
