@@ -29,7 +29,7 @@ public class Spike : MonoBehaviour
     Vector2 prevPos;
     bool reset = false;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<Player>())
         {
@@ -39,7 +39,7 @@ public class Spike : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<Player>())
         {
