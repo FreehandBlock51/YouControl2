@@ -71,7 +71,7 @@ public class EntanglableBlock : MonoBehaviour
         entangled = !entangled;
         if (entangled)
         {
-            if (entangledBlocks >= 2)
+            if (entangledBlocks >= 2 || Vector2.Distance(rigidbody.position, Player.Main.rigidbody.position) > 5)
             {
                 entangled = false;
                 return;

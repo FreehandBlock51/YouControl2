@@ -20,13 +20,14 @@ public class Player : MonoBehaviour
     public float speed = 0.1f;
 
     private Vector2 CurrentMovement = Vector2.zero;
+    Vector2 spawn;
 
     public new Rigidbody2D rigidbody => GetComponent<Rigidbody2D>();
 
     // Start is called before the first frame update
     void Start()
     {
-
+        spawn = rigidbody.position;
     }
 
     Vector2 movement;
