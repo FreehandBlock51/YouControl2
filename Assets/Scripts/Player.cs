@@ -30,21 +30,27 @@ public class Player : MonoBehaviour
         spawn = rigidbody.position;
     }
 
+    public void Respawn() => rigidbody.MovePosition(spawn);
+
     Vector2 movement;
 
 
     // Update is called once per frame
     void Update()
     {
+        movement = new Vector2(Input.GetAxis(HorizontalAxisName), Input.GetAxis(VerticalAxisName)) * speed;
         rigidbody.velocity = Vector2.zero;
-        rigidbody.MovePosition(rigidbody.position + (new Vector2(Input.GetAxis(HorizontalAxisName), Input.GetAxis(VerticalAxisName)) * speed));
+        rigidbody.MovePosition(rigidbody.position + movement);
         
         Animate(movement);
     }
 
     void Animate(Vector2 movement)
     {
-        Animator.SetFloat("X", movement.x);
-        Animator.SetFloat("Y", movement.y);
+        if (Animator.runtimeAnimatorController)
+        {
+            Animator.SetFloat("X", movement.x);
+            Animator.SetFloat("Y", movement.y);
+        }
     }
 }

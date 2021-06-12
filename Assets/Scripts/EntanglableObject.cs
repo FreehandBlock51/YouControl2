@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntanglableBlock : MonoBehaviour
+public class EntanglableObject : MonoBehaviour
 {
     public new Rigidbody2D rigidbody => GetComponent<Rigidbody2D>();
-    static EntanglableBlock searching;
+    static EntanglableObject searching;
     static uint entangledBlocks = 0;
 
     public string ExitEntanglementButton = "Cancel";
 
-    public EntanglableBlock entangledWith;
+    public EntanglableObject entangledWith;
     public bool entangled;
     Vector2 movement;
     Vector2 prevPos;
@@ -110,7 +110,7 @@ public class EntanglableBlock : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<Player>())
+        if (!GetComponent<Spike>() && collision.gameObject.GetComponent<Player>())
         {
             isMoving = true;
         }
