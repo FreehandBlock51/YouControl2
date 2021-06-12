@@ -12,7 +12,8 @@ public class EntanglableBlock : MonoBehaviour
 
     public EntanglableBlock entangledWith;
     public bool entangled;
-    Vector2 distance;
+    Vector2 movement;
+    Vector2 prevPos;
     public bool isMoving;
 
     // Start is called before the first frame update
@@ -26,6 +27,7 @@ public class EntanglableBlock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        movement = rigidbody.position - prevPos;
         if (Input.GetButtonUp(ExitEntanglementButton))
         {
             searching = null;
@@ -35,12 +37,9 @@ public class EntanglableBlock : MonoBehaviour
         }
         else if (entangled && entangledWith && isMoving)
         {
-            entangledWith.rigidbody.MovePosition(rigidbody.position + distance);
+            entangledWith.rigidbody.MovePosition(entangledWith.rigidbody.position - movement);
         }
-        else if (!entangled || !entangledWith)
-        {
-            distance = Vector3.zero;
-        }
+        prevPos = rigidbody.position;
     }
 
     IEnumerator ColorChange()
@@ -68,10 +67,14 @@ public class EntanglableBlock : MonoBehaviour
 
     private void OnMouseUpAsButton()
     {
+        if (Vector2.Distance(rigidbody.position, Player.Main.rigidbody.position) > 5)
+        {
+            return;
+        }
         entangled = !entangled;
         if (entangled)
         {
-            if (entangledBlocks >= 2 || Vector2.Distance(rigidbody.position, Player.Main.rigidbody.position) > 5)
+            if (entangledBlocks >= 2)
             {
                 entangled = false;
                 return;
@@ -86,8 +89,6 @@ public class EntanglableBlock : MonoBehaviour
                 entangledWith = searching;
                 searching = null;
                 entangledWith.entangledWith = this;
-                distance = entangledWith.rigidbody.position - rigidbody.position;
-                entangledWith.distance = rigidbody.position - entangledWith.rigidbody.position;
             }
         }
         else
