@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 6272950044627024481}
   - component: {fileID: 305655925481461141}
   - component: {fileID: 7951145214430040609}
-  - component: {fileID: 2843944679660054246}
   - component: {fileID: 6128240145428612626}
+  - component: {fileID: 9056793979285058692}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
@@ -114,7 +114,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f3d623c6c9a9a145bd065b2737bd83c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!60 &2843944679660054246
+--- !u!50 &6128240145428612626
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606477574941526268}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 10
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!60 &9056793979285058692
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -139,30 +160,6 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.09375, y: 0.5}
-      - {x: -0.5, y: -0.3125}
-      - {x: -0.5, y: -0.5}
+    - - {x: -0.5, y: -0.5}
+      - {x: 0, y: 0.5}
       - {x: 0.5, y: -0.5}
-      - {x: 0.5, y: -0.3125}
-      - {x: 0.09375, y: 0.5}
---- !u!50 &6128240145428612626
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 606477574941526268}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 10
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4

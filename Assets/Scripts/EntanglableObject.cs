@@ -44,6 +44,8 @@ public class EntanglableObject : MonoBehaviour
 
     IEnumerator ColorChange()
     {
+        bool prevEntangled;
+        EntanglableObject prevSearching;
         while (true)
         {
             if (entangled)
@@ -61,6 +63,9 @@ public class EntanglableObject : MonoBehaviour
             {
                 GetComponent<SpriteRenderer>().color = Color.white;
             }
+            prevEntangled = entangled;
+            prevSearching = searching;
+            yield return new WaitWhile(() => prevEntangled == entangled && prevSearching == searching);
             yield return new WaitForEndOfFrame();
         }
     }
@@ -110,7 +115,7 @@ public class EntanglableObject : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!GetComponent<Spike>() && collision.gameObject.GetComponent<Player>())
+        if (collision.gameObject.GetComponent<Player>())
         {
             isMoving = true;
         }

@@ -16,11 +16,34 @@ public class Spike : MonoBehaviour
         
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void FixedUpdate()
+    {
+        if (reset)
+        {
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            GetComponent<Rigidbody2D>().position = prevPos;
+            reset = false;
+        }
+    }
+
+    Vector2 prevPos;
+    bool reset = false;
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.GetComponent<Player>())
         {
             collision.gameObject.GetComponent<Player>().Respawn();
+            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            prevPos = GetComponent<Rigidbody2D>().position;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<Player>())
+        {
+            reset = true;
         }
     }
 }

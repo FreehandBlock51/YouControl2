@@ -28,17 +28,25 @@ public class Player : MonoBehaviour
     void Start()
     {
         spawn = rigidbody.position;
+        respawning = false;
     }
 
-    public void Respawn() => rigidbody.MovePosition(spawn);
+    public void Respawn() => respawning = true;
 
     Vector2 movement;
+    bool respawning;
 
 
     // Update is called once per frame
     void Update()
     {
-        movement = new Vector2(Input.GetAxis(HorizontalAxisName), Input.GetAxis(VerticalAxisName)) * speed;
+        if (respawning)
+        {
+            rigidbody.MovePosition(spawn);
+            respawning = false;
+            return;
+        }
+        movement = new Vector2(Input.GetAxisRaw(HorizontalAxisName), Input.GetAxisRaw(VerticalAxisName)) * speed;
         rigidbody.velocity = Vector2.zero;
         rigidbody.MovePosition(rigidbody.position + movement);
         
