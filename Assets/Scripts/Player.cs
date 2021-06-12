@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     public string VerticalAxisName = "Vertical";
     public string AttackButtonName = "Jump";
     [Min(1 / float.MaxValue)]
-    public float speed = 0.1f;
+    public float speed = 5f;
 
     private Vector2 CurrentMovement = Vector2.zero;
     Vector2 spawn;
@@ -43,12 +43,12 @@ public class Player : MonoBehaviour
         if (respawning)
         {
             rigidbody.MovePosition(spawn);
+            rigidbody.velocity = Vector2.zero;
             respawning = false;
             return;
         }
         movement = new Vector2(Input.GetAxisRaw(HorizontalAxisName), Input.GetAxisRaw(VerticalAxisName)) * speed;
-        rigidbody.velocity = Vector2.zero;
-        rigidbody.MovePosition(rigidbody.position + movement);
+        rigidbody.velocity = movement;
         
         Animate(movement);
     }

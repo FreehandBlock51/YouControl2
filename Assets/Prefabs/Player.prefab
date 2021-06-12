@@ -157,4 +157,4 @@ MonoBehaviour:
   HorizontalAxisName: Horizontal
   VerticalAxisName: Vertical
   AttackButtonName: Jump
-  speed: 0.1
+  speed: 5
