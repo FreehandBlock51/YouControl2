@@ -28,18 +28,25 @@ public class EntanglableObject : MonoBehaviour
     void Update()
     {
         movement = rigidbody.position - prevPos;
-        if (Input.GetButtonUp(ExitEntanglementButton))
+        if ((Input.GetButtonUp(ExitEntanglementButton) || resetting) && entangled)
         {
             searching = null;
-            entangledBlocks = 0;
+            entangledBlocks--;
             entangledWith = null;
             entangled = false;
+            resetting = entangledBlocks > 0;
         }
         else if (entangled && entangledWith && isMoving)
         {
             entangledWith.rigidbody.MovePosition(entangledWith.rigidbody.position - movement);
         }
         prevPos = rigidbody.position;
+    }
+
+    static bool resetting = false;
+    public static void ResetEntanglement()
+    {
+        resetting = true;
     }
 
     IEnumerator ColorChange()

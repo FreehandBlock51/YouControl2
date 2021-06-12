@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
         {
             rigidbody.MovePosition(spawn);
             rigidbody.velocity = Vector2.zero;
+            EntanglableObject.ResetEntanglement();
             respawning = false;
             return;
         }

@@ -161,9 +161,9 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.5, y: -0.5}
-      - {x: 0, y: 0.5}
-      - {x: 0.5, y: -0.5}
+    - - {x: -0.45, y: -0.45}
+      - {x: 0, y: 0.45}
+      - {x: 0.45, y: -0.45}
 --- !u!60 &2668655424189698766
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -189,6 +189,6 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.6, y: -0.6}
-      - {x: 0, y: 0.6}
-      - {x: 0.6, y: -0.6}
+    - - {x: -0.55, y: -0.5}
+      - {x: 0, y: 0.55}
+      - {x: 0.55, y: -0.5}
