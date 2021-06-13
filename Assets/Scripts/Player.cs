@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour
@@ -22,6 +24,9 @@ public class Player : MonoBehaviour
     private Vector2 CurrentMovement = Vector2.zero;
     Vector2 spawn;
 
+    public Canvas pauseCanvas;
+    bool paused;
+
     public new Rigidbody2D rigidbody => GetComponent<Rigidbody2D>();
 
     // Start is called before the first frame update
@@ -29,6 +34,13 @@ public class Player : MonoBehaviour
     {
         spawn = rigidbody.position;
         respawning = false;
+
+        pauseCanvas = pauseCanvas ?? GetComponentInChildren<Canvas>();
+        if (pauseCanvas)
+        {
+            pauseCanvas.gameObject.SetActive(false);
+        }
+        paused = false;
     }
 
     public void Respawn() => respawning = true;
@@ -40,6 +52,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (paused)
+        {
+            return;
+        }
         if (respawning)
         {
             rigidbody.MovePosition(spawn);
@@ -61,5 +77,16 @@ public class Player : MonoBehaviour
             Animator.SetFloat("X", movement.x);
             Animator.SetFloat("Y", movement.y);
         }
+    }
+
+    public void LoadMainMenu() => SceneManager.LoadSceneAsync(0);
+    public void ResetLevel()
+    {
+        Debug.LogError("Can't reset yet!");
+    }
+    public void TogglePauseScreen()
+    {
+        paused = !paused;
+        pauseCanvas.gameObject.SetActive(paused);
     }
 }
