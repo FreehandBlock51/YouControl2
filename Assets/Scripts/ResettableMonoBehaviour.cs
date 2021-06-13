@@ -4,7 +4,7 @@ public class ResettableMonoBehaviour : MonoBehaviour
 {
     Vector2 startPos;
 
-    private void Awake()
+    protected virtual void OnEnable()
     {
         startPos = GetComponent<Rigidbody2D>().position;
     }

@@ -17,8 +17,9 @@ public class EntanglableObject : ResettableMonoBehaviour
     public bool isMoving;
 
     // Start is called before the first frame update
-    void Awake()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         entangled = false;
         isMoving = false;
         StartCoroutine(ColorChange());
@@ -47,6 +48,15 @@ public class EntanglableObject : ResettableMonoBehaviour
     public static void ResetEntanglement()
     {
         resetting = true;
+    }
+
+    public void ResetImmediately()
+    {
+        searching = null;
+        if (entangledWith) entangledBlocks--;
+        entangledWith = null;
+        entangled = false;
+        resetting = entangledBlocks > 0;
     }
 
     IEnumerator ColorChange()
@@ -139,6 +149,6 @@ public class EntanglableObject : ResettableMonoBehaviour
     public override void ResetPos()
     {
         base.ResetPos();
-        ResetEntanglement();
+        ResetImmediately();
     }
 }

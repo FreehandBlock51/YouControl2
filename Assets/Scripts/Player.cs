@@ -90,7 +90,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void LoadMainMenu() => MenuManager.LoadScene(0);
+    public void LoadMainMenu()
+    {
+        ResetLevel();
+        MenuManager.LoadScene(0);
+    }
     public void TogglePauseScreen()
     {
         SetPauseState(!paused);

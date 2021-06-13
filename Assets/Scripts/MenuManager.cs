@@ -27,9 +27,7 @@ public class MenuManager : MonoBehaviour
 
     public static void LoadScene(int buildIndex)
     {
-        Scene scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(buildIndex, LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync(scene);
+        SceneManager.LoadScene(buildIndex, LoadSceneMode.Single);
     }
 }
 
