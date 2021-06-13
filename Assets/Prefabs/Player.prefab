@@ -368,7 +368,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4732787822123484446}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: 
+        m_MethodName: ResetLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
