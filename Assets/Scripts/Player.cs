@@ -25,8 +25,6 @@ public class Player : MonoBehaviour
     Vector2 spawn;
 
     public Canvas pauseCanvas;
-    public Canvas HUDCanvas;
-    public Canvas finishCanvas;
     bool paused;
 
     public new Rigidbody2D rigidbody => GetComponent<Rigidbody2D>();
@@ -42,14 +40,6 @@ public class Player : MonoBehaviour
         {
             pauseCanvas.gameObject.SetActive(false);
         }
-        if (HUDCanvas)
-        {
-            HUDCanvas.gameObject.SetActive(true);
-        }
-        if (finishCanvas)
-        {
-            finishCanvas.gameObject.SetActive(false);
-        }
         paused = false;
     }
 
@@ -64,7 +54,6 @@ public class Player : MonoBehaviour
     {
         if (paused)
         {
-            rigidbody.velocity = Vector2.zero;
             return;
         }
         if (respawning)
@@ -97,19 +86,7 @@ public class Player : MonoBehaviour
     }
     public void TogglePauseScreen()
     {
-        SetPauseState(!paused);
-    }
-
-    public void SetPauseState(bool paused)
-    {
-        this.paused = paused;
-        pauseCanvas.gameObject.SetActive(true);
-    }
-
-    public void Finish()
-    {
-        SetPauseState(true);
-        HUDCanvas.gameObject.SetActive(false);
-        finishCanvas.gameObject.SetActive(true);
+        paused = !paused;
+        pauseCanvas.gameObject.SetActive(paused);
     }
 }
