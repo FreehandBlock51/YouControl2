@@ -112,6 +112,8 @@ public class Player : MonoBehaviour
     public void ResetLevel()
     {
         SetPauseState(false);
+        HUDCanvas.gameObject.SetActive(true);
+        finishCanvas.gameObject.SetActive(false);
         Respawn();
         foreach (var e in Object.FindObjectsOfType<ResettableMonoBehaviour>())
         {

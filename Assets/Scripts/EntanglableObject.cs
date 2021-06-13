@@ -25,7 +25,7 @@ public class EntanglableObject : ResettableMonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         movement = rigidbody.position - prevPos;
         if ((Input.GetButtonUp(ExitEntanglementButton) || resetting) && entangled)
@@ -132,6 +132,7 @@ public class EntanglableObject : ResettableMonoBehaviour
         if (collision.gameObject.GetComponent<Player>())
         {
             isMoving = false;
+            rigidbody.velocity = Vector2.zero;
         }
     }
 }
