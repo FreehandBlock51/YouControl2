@@ -23,5 +23,6 @@ public class MenuManager : MonoBehaviour
     }
 
     public void LoadLevel(int buildIndex) => SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Single);
+    public void QuitLevel() => Application.Quit(0);
 }
 
