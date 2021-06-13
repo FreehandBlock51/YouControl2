@@ -90,11 +90,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void LoadMainMenu() => SceneManager.LoadSceneAsync(0);
-    public void ResetLevel()
-    {
-        Debug.LogError("Can't reset yet!");
-    }
+    public void LoadMainMenu() => SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
     public void TogglePauseScreen()
     {
         SetPauseState(!paused);
@@ -103,7 +99,7 @@ public class Player : MonoBehaviour
     public void SetPauseState(bool paused)
     {
         this.paused = paused;
-        pauseCanvas.gameObject.SetActive(true);
+        pauseCanvas.gameObject.SetActive(paused);
     }
 
     public void Finish()
@@ -111,5 +107,15 @@ public class Player : MonoBehaviour
         SetPauseState(true);
         HUDCanvas.gameObject.SetActive(false);
         finishCanvas.gameObject.SetActive(true);
+    }
+
+    public void ResetLevel()
+    {
+        SetPauseState(false);
+        Respawn();
+        foreach (var e in Object.FindObjectsOfType<ResettableMonoBehaviour>())
+        {
+            e.ResetPos();
+        }
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EntanglableObject : MonoBehaviour
+public class EntanglableObject : ResettableMonoBehaviour
 {
     public new Rigidbody2D rigidbody => GetComponent<Rigidbody2D>();
     static EntanglableObject searching;
