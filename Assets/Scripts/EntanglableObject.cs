@@ -17,7 +17,7 @@ public class EntanglableObject : ResettableMonoBehaviour
     public bool isMoving;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         entangled = false;
         isMoving = false;
@@ -134,5 +134,11 @@ public class EntanglableObject : ResettableMonoBehaviour
             isMoving = false;
             rigidbody.velocity = Vector2.zero;
         }
+    }
+
+    public override void ResetPos()
+    {
+        base.ResetPos();
+        ResetEntanglement();
     }
 }

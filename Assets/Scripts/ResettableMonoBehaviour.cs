@@ -9,5 +9,5 @@ public class ResettableMonoBehaviour : MonoBehaviour
         startPos = GetComponent<Rigidbody2D>().position;
     }
 
-    public void ResetPos() => GetComponent<Rigidbody2D>().MovePosition(startPos);
+    public virtual void ResetPos() => GetComponent<Rigidbody2D>().MovePosition(startPos);
 }

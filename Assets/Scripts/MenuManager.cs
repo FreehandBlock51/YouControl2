@@ -22,7 +22,14 @@ public class MenuManager : MonoBehaviour
         MainMenuPanel.SetActive(true);
     }
 
-    public void LoadLevel(int buildIndex) => SceneManager.LoadSceneAsync(buildIndex, LoadSceneMode.Single);
+    public void LoadLevel(int buildIndex) => LoadScene(buildIndex);
     public void QuitLevel() => Application.Quit(0);
+
+    public static void LoadScene(int buildIndex)
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(buildIndex, LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(scene);
+    }
 }
 

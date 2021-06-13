@@ -90,7 +90,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void LoadMainMenu() => SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+    public void LoadMainMenu() => MenuManager.LoadScene(0);
     public void TogglePauseScreen()
     {
         SetPauseState(!paused);
@@ -111,7 +111,6 @@ public class Player : MonoBehaviour
 
     public void ResetLevel()
     {
-        SetPauseState(false);
         HUDCanvas.gameObject.SetActive(true);
         finishCanvas.gameObject.SetActive(false);
         Respawn();
@@ -119,5 +118,6 @@ public class Player : MonoBehaviour
         {
             e.ResetPos();
         }
+        SetPauseState(false);
     }
 }
