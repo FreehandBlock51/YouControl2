@@ -46,3 +46,6 @@ build_vs/
 
 # macOS metadata
 .DS_Store
+
+# Unity User Settings
+UserSettings/
