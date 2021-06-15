@@ -43,3 +43,6 @@ Logs/
 # Builds
 build/
 build_vs/
+
+# macOS metadata
+.DS_Store
