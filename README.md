@@ -1,9 +1,7 @@
 # YouControl2
 
-[<img src="https://img.itch.zone/aW1nLzYyNzcwMDkuanBlZw==/105x83%23/YVUH98.jpeg" /><br>itch.io](https://3-inputs.itch.io/entangled)
-<h1> about this repository </h1>
- 
- <p> The ENtangled source code and assets for the video game</p>
- <h2> join our discord! </h2>
-https://discord.gg/VsZWQtxg
- 
+[<image src="https://static.itch.io/images/badge-color.svg" width="120" height="40" title="Get the game on itch.io!">](https://3-inputs.itch.io/entangled) [<img src="https://discord.com/assets/cb48d2a8d4991281d7a6a95d2f58195e.svg" width="120" height="40" title="Join our discord!">](https://discord.gg/VsZWQtxg)
+
+## about this repository
+
+The ENtangled source code and assets for the video game
