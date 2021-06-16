@@ -4,4 +4,6 @@
 <h1> about this repository </h1>
  
  <p> The ENtangled source code and assets for the video game</p>
+ <h2> join our discord! </h2>
+https://discord.gg/VsZWQtxg
  
