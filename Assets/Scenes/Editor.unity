@@ -676,3 +676,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilemap: {fileID: 428052014}
+  data: {fileID: 0}
+  mappings: {fileID: 0}
