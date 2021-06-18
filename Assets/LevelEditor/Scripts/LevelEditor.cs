@@ -6,6 +6,9 @@ public class LevelEditor : MonoBehaviour
 {
     public UnityEngine.Tilemaps.Tilemap tilemap;
 
+    public LevelData data;
+    public LevelMappings mappings;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,8 +19,10 @@ public class LevelEditor : MonoBehaviour
                 throw new System.ArgumentNullException(name);
             }
         }
-
         validate(tilemap, nameof(tilemap));
+        validate(mappings, nameof(mappings));
+
+        LevelData.Create(in mappings, out data);
     }
 
     // Update is called once per frame
