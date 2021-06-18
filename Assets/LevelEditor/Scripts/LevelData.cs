@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [CreateAssetMenu]
 public class LevelData : ScriptableObject
@@ -13,23 +14,68 @@ public class LevelData : ScriptableObject
         data.mappings = mappings;
     }
 
-    public static void Import(in string rawData, in LevelMappings mappings, out LevelData data)
+    public static void Import(in Texture2D rawData, in LevelMappings mappings, out LevelData data)
     {
         Create(in mappings, out data);
-        throw new System.NotImplementedException();
+        for (int y = 0; y < rawData.height; y++)
+        {
+            for (int x = 0; x < rawData.width; y++)
+            {
+
+            }
+        }
     }
 
     [System.Serializable]
     public struct Object
     {
-        public int id;
+        public Color color;
         public PositionData positionData;
 
-        public int GetObjectID() => id;
+        public Color GetObjectColor() => color;
 
-        public Object(int id, PositionData positionData)
+        public bool TryGetGameObject(LevelMappings map, out GameObject obj)
         {
-            this.id = id;
+            try
+            {
+                obj = map.GetGameObject(color);
+                return true;
+            }
+            catch (KeyNotFoundException)
+            {
+                obj = null;
+                return false;
+            }
+        }
+        public bool TryGetTile(LevelMappings map, out TileBase tile)
+        {
+            try
+            {
+                tile = map.GetTile(color);
+                return true;
+            }
+            catch (KeyNotFoundException)
+            {
+                tile = null;
+                return false;
+            }
+        }
+        public bool TryGetAny(LevelMappings map, out GameObject obj, out TileBase tile)
+        {
+            if (TryGetGameObject(map, out obj))
+            {
+                tile = null;
+                return true;
+            }
+            else
+            {
+                return TryGetTile(map, out tile);
+            }
+        }
+
+        public Object(Color color, PositionData positionData)
+        {
+            this.color = color;
             this.positionData = positionData;
         }
     }

@@ -7,26 +7,60 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class LevelMappings : ScriptableObject
 {
-    [SerializeField]
-    private List<GameObject> objects;
-    [SerializeField]
-    private TileData tiles;
+    private Dictionary<Color, GameObject> objects;
+    private Dictionary<Color, Tile> tiles;
+    [System.Serializable]
+    public struct MapEntry<TKey, TValue>
+    {
+        public TKey key;
+        public TValue value;
+    }
+    public List<MapEntry<Color, GameObject>> objectMap;
+    public List<MapEntry<Color, Tile>> tileMap;
 
-    public GameObject GetGameObject(int objId)
+    private void Awake()
     {
-        return objects[objId];
+        objects ??= new Dictionary<Color, GameObject>(objectMap.Count);
+        tiles ??= new Dictionary<Color, Tile>(tileMap.Count);
+        foreach (MapEntry<Color, GameObject> entry in objectMap)
+        {
+            try
+            {
+                objects.Add(entry.key, entry.value);
+            }
+            catch (System.ArgumentException)
+            {
+                continue;
+            }
+        }
+        foreach (MapEntry<Color, Tile> entry in tileMap)
+        {
+            try
+            {
+                tiles.Add(entry.key, entry.value);
+            }
+            catch (System.ArgumentException)
+            {
+                continue;
+            }
+        }
     }
-    public int GetObjID(GameObject obj)
+
+    public GameObject GetGameObject(Color objColor)
     {
-        return objects.IndexOf(obj);
+        return objects[objColor];
     }
-    public TileBase GetTile(int tileId)
+    public Color GetObjectColor(GameObject obj)
     {
-        return tiles[tileId];
+        return objects.GetKey(obj);
     }
-    public int GetTileID(TileBase tile)
+    public TileBase GetTile(Color tileColor)
     {
-        return tiles.IndexOf(tile);
+        return tiles[tileColor];
+    }
+    public Color GetTileColor(Tile tile)
+    {
+        return tiles.GetKey(tile);
     }
 
     [System.Serializable]
