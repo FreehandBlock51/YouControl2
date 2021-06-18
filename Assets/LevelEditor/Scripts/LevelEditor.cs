@@ -5,6 +5,7 @@ using UnityEngine;
 public class LevelEditor : MonoBehaviour
 {
     public UnityEngine.Tilemaps.Tilemap tilemap;
+    public UnityEngine.Tilemaps.Tile selectedTile;
 
     public LevelData data;
     public LevelMappings mappings;
@@ -28,11 +29,15 @@ public class LevelEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetMouseButtonUp(0))
+        {
+            print("e");
+            tilemap.SetTile(tilemap.WorldToCell(Camera.current.ScreenToWorldPoint(Input.mousePosition)), selectedTile);
+        }
     }
 
-    public void Export(System.IO.Stream output)
+    public void Export(out Texture2D output)
     {
-        Debug.Assert(output.CanWrite);
+        throw new System.NotImplementedException();
     }
 }

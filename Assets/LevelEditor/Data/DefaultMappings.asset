@@ -12,10 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fcfb07cdcd7ab245ac6fe4e4ef895a4, type: 3}
   m_Name: DefaultMappings
   m_EditorClassIdentifier: 
-  objects:
-  - {fileID: 4732787822123484435, guid: 7a284f56c35968f40b2f7e073e5b4ff0, type: 3}
-  tiles:
-    mapObject: {fileID: 3251187019695923031, guid: 2a52d396c28749d458aa1b342fc569ec, type: 3}
-    bounds:
-      m_Position: {x: -1, y: 1, z: 0}
-      m_Size: {x: 6, y: 6, z: 1}
+  objectMap:
+  - key: {r: 0, g: 0, b: 1, a: 1}
+    value: {fileID: 4732787822123484435, guid: 7a284f56c35968f40b2f7e073e5b4ff0, type: 3}
+  - key: {r: 0, g: 1, b: 0, a: 1}
+    value: {fileID: 6343509088035576248, guid: 1965a39a4fba0d6459ad923f279253b4, type: 3}
+  - key: {r: 1, g: 0, b: 0, a: 1}
+    value: {fileID: 2032861028951369801, guid: 98527b2a8bb3cbb439ac73c328bc3d22, type: 3}
+  tileMap:
+  - key: {r: 1, g: 1, b: 1, a: 0}
+    value: {fileID: 0}
+  - key: {r: 1, g: 1, b: 1, a: 1}
+    value: {fileID: 11400000, guid: b4bff48038fd71c47aa9397d8e3fd52e, type: 2}
+  - key: {r: 0, g: 0, b: 0, a: 1}
+    value: {fileID: 11400000, guid: cbb178fd8b7b9c942a5dbea0926e128f, type: 2}
