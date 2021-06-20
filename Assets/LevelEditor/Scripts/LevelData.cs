@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Level Editor/Level Data")]
 public class LevelData : ScriptableObject
 {
     public static LevelData CreateInstance() => CreateInstance<LevelData>();

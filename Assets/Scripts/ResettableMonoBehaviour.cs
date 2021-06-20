@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class ResettableMonoBehaviour : MonoBehaviour
+public class ResettableMonoBehaviour : MechanicBehaviour
 {
     Vector2 startPos;
 

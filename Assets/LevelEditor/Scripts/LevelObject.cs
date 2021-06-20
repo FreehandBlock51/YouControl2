@@ -4,11 +4,17 @@ using Newtonsoft.Json;
 
 [System.Serializable]
 [JsonObject(MemberSerialization.Fields)]
-public struct LevelObject
+public class LevelObject
 {
+    public int hash;
     [JsonRequired]
-    public int id;
+    public int type;
     public LevelData.PositionData transform;
     public bool isTile;
-    public int otherId;
+    public LevelObject other;
+
+    public LevelObject()
+    {
+        
+    }
 }

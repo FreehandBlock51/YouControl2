@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu]
+[CreateAssetMenu(menuName = "Level Editor/Level Mappings")]
 [System.Serializable]
 public class LevelMappings : ScriptableObject
 {
