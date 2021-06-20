@@ -65,6 +65,6 @@ public class LevelSerializer : ScriptableObject
     {
         levelObjects.RemoveAt(FindIndex(tile));
     }
-
+    [SerializeField]
     private List<LevelObject> levelObjects;
 }

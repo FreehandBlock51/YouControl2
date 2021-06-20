@@ -47,8 +47,7 @@ public class LevelEditor : MonoBehaviour
     public void SelectNewTile(Tile newTile) => SelectNewObject(newTile);
     public RectTransform deadZone;
 
-    public LevelData data;
-    public LevelMappings mappings;
+    public LevelSerializer serializer;
 
     // Start is called before the first frame update
     void Start()
@@ -61,9 +60,8 @@ public class LevelEditor : MonoBehaviour
             }
         }
         validate(tilemap, nameof(tilemap));
-        validate(mappings, nameof(mappings));
+        validate(serializer, nameof(serializer));
 
-        LevelData.Create(in mappings, out data);
         print(selectedObject.GetCurrentType());
     }
 
