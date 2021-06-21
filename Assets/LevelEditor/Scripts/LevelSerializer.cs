@@ -2,14 +2,23 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+[System.Serializable]
 [CreateAssetMenu(menuName = "Level Editor/Level Serializer")]
 public class LevelSerializer : ScriptableObject
 {
-    public static LevelSerializer FromMappings(LevelSerializer map)
+    public static LevelSerializer FromMappings(LevelSerializer map) => FromMappings(map, map.name);
+    public static LevelSerializer FromMappings(LevelSerializer map, string name)
     {
-        map.levelObjects = new List<LevelObject>();
-        return map;
+        LevelSerializer serializer = CreateInstance<LevelSerializer>();
+        serializer.objectMap = map.objectMap;
+        serializer.objectMap.TrimExcess();
+        serializer.tileMap = map.tileMap;
+        serializer.tileMap.TrimExcess();
+        serializer.name = name;
+        return serializer;
     }
+
+    [Header("Mappings")]
 
     [SerializeField]
     private List<GameObject> objectMap;
@@ -24,17 +33,27 @@ public class LevelSerializer : ScriptableObject
             return levelObjects[index];
         }
 
-        return new LevelObject {
+        return new LevelObject()
+        {
             hash = gameObject.GetHashCode(),
             isTile = false,
-            transform = new LevelData.PositionData(gameObject.transform.position, gameObject.transform.rotation.z, gameObject.transform.localScale),
+            transform = new SerializedTransform(gameObject.transform.position, gameObject.transform.rotation.z, gameObject.transform.localScale),
             other = gameObject.GetComponent<Portal>() ? SerializeGameObject(gameObject.GetComponent<Portal>().other.gameObject) : null,
-            type = objectMap.FindIndex((GameObject obj) => obj == gameObject || obj.GetComponents<MechanicBehaviour>() == gameObject.GetComponents<MechanicBehaviour>())
+            type = objectMap.FindIndex((GameObject obj) =>
+                obj == gameObject || gameObject.name.StartsWith(obj.name)
+            )
         };
     }
     public int FindIndex(GameObject gameObject)
     {
-        return levelObjects.FindIndex((LevelObject obj) => obj.hash == gameObject.GetHashCode());
+        try
+        {
+            return levelObjects.FindIndex((LevelObject obj) => { Debug.Log(obj); return obj.hash == gameObject.GetHashCode(); });
+        }
+        catch (System.NullReferenceException e)
+        {
+            return -1;
+        }
     }
     public LevelObject SerializeTile(Tile tile)
     {
@@ -55,7 +74,18 @@ public class LevelSerializer : ScriptableObject
     }
     public int FindIndex(Tile tile)
     {
-        return levelObjects.FindIndex((LevelObject obj) => obj.hash == tile.GetHashCode());
+        try
+        {
+            return levelObjects.FindIndex((LevelObject obj) => { Debug.Log(obj); return obj.hash == tile.GetHashCode(); });
+        }
+        catch (System.NullReferenceException e)
+        {
+            return -1;
+        }
+    }
+    public void RemoveLevelObject(LevelObject obj)
+    {
+        levelObjects.Remove(obj);
     }
     public void RemoveGameObject(GameObject gameObject)
     {
@@ -64,6 +94,42 @@ public class LevelSerializer : ScriptableObject
     public void RemoveTile(Tile tile)
     {
         levelObjects.RemoveAt(FindIndex(tile));
+    }
+    public bool TryRemoveLevelObject(LevelObject obj)
+    {
+        try
+        {
+            RemoveLevelObject(obj);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    public bool TryRemoveGameObject(GameObject gameObject)
+    {
+        try
+        {
+            RemoveGameObject(gameObject);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    public bool TryRemoveTile(Tile tile)
+    {
+        try
+        {
+            RemoveTile(tile);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
     public void AddLevelObject(LevelObject obj)
     {
@@ -77,6 +143,8 @@ public class LevelSerializer : ScriptableObject
     {
         AddLevelObject(SerializeTile(tile));
     }
+
+    [Space(20f)]
 
     [SerializeField]
     private List<LevelObject> levelObjects;

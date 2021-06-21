@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ae3e288154edc94280f328d0640814a, type: 3}
   m_Name: DefaultSerializer
   m_EditorClassIdentifier: 
-  objectMap: []
-  tileMap: []
+  objectMap:
+  - {fileID: 2032861028951369801, guid: 98527b2a8bb3cbb439ac73c328bc3d22, type: 3}
+  - {fileID: 3329988243604063684, guid: cf215ed1b1eeb734a9e35b2306ed7f61, type: 3}
+  tileMap:
+  - {fileID: 11400000, guid: b4bff48038fd71c47aa9397d8e3fd52e, type: 2}
+  - {fileID: 11400000, guid: cbb178fd8b7b9c942a5dbea0926e128f, type: 2}
   levelObjects: []
