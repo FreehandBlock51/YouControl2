@@ -68,7 +68,8 @@ public class LevelEditor : MonoBehaviour
     [SerializeField]
     private bool canEdit;
 
-    public LevelSerializer serializer;
+    public LevelSerializer map;
+    private LevelSerializer serializer;
 
     // Start is called before the first frame update
     void Start()
@@ -81,7 +82,8 @@ public class LevelEditor : MonoBehaviour
             }
         }
         validate(tilemap, nameof(tilemap));
-        validate(serializer, nameof(serializer));
+        validate(map, nameof(map));
+        serializer = LevelSerializer.FromMappings(map);
 
         print(selectedObject.GetCurrentType());
         if (!selectedObject)
@@ -154,6 +156,11 @@ public class LevelEditor : MonoBehaviour
                 GameObject go = Instantiate((GameObject)selectedObject);
                 go.transform.position = new Vector3(Mathf.Floor(worldPoint.x) + 0.5f, Mathf.Floor(worldPoint.y) + 0.5f);
                 serializer.AddGameObject(go);
+                print("Game Object placed successfully");
+            }
+            else
+            {
+                print("No objects to place!");
             }
         }
         catch (System.NullReferenceException e)
@@ -171,14 +178,17 @@ public class LevelEditor : MonoBehaviour
 
             Vector3Int tilePoint = tilemap.WorldToCell(worldPoint);
             print($"Tile Point: {tilePoint}");
+            serializer.TryRemoveTile(tilemap.GetTile<Tile>(tilePoint));
             tilemap.SetTile(tilePoint, null);
             print("Tile removed Successfully");
 
             RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector3.one, 1f);
             if (hit.collider)
             {
+                serializer.TryRemoveGameObject(hit.collider.gameObject);
                 Destroy(hit.collider.gameObject);
             }
+            print("Game Objects removed successfully");
         }
         catch (System.NullReferenceException e)
         {
@@ -188,6 +198,16 @@ public class LevelEditor : MonoBehaviour
 
     public void Export(out string output)
     {
-        output = Newtonsoft.Json.JsonConvert.SerializeObject(serializer.GetObjects());
+        output = Newtonsoft.Json.JsonConvert.SerializeObject(serializer.GetObjects(), new Newtonsoft.Json.JsonSerializerSettings {
+            ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        });
     }
+#if DEBUG
+    public void DebugExport()
+    {
+        string output;
+        Export(out output);
+        print(output);
+    }
+#endif
 }
