@@ -178,14 +178,14 @@ public class LevelEditor : MonoBehaviour
 
             Vector3Int tilePoint = tilemap.WorldToCell(worldPoint);
             print($"Tile Point: {tilePoint}");
-            serializer.TryRemoveTile(tilemap.GetTile<Tile>(tilePoint));
+            serializer.RemoveTileAtPosition((Vector2Int)tilePoint);
             tilemap.SetTile(tilePoint, null);
             print("Tile removed Successfully");
 
+            serializer.RemoveGameObjectAtPosition(new Vector2(Mathf.Floor(worldPoint.x) + 0.5f, Mathf.Floor(worldPoint.y) + 0.5f));
             RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector3.one, 1f);
             if (hit.collider)
             {
-                serializer.TryRemoveGameObject(hit.collider.gameObject);
                 Destroy(hit.collider.gameObject);
             }
             print("Game Objects removed successfully");

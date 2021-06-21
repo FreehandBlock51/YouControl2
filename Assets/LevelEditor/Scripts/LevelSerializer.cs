@@ -51,7 +51,7 @@ public class LevelSerializer : ScriptableObject
         {
             return levelObjects.FindIndex((LevelObject obj) => { Debug.Log(obj); return obj.hash == gameObject.GetHashCode(); });
         }
-        catch (System.NullReferenceException e)
+        catch (System.NullReferenceException)
         {
             return -1;
         }
@@ -143,6 +143,14 @@ public class LevelSerializer : ScriptableObject
     public void AddTile(Tile tile)
     {
         AddLevelObject(SerializeTile(tile));
+    }
+    public void RemoveGameObjectAtPosition(Vector2 position)
+    {
+        levelObjects.RemoveAll((LevelObject obj) => obj.isTile == false && obj.transform.position == position);
+    }
+    public void RemoveTileAtPosition(Vector2 position)
+    {
+        levelObjects.RemoveAll((LevelObject obj) => obj.isTile == true && obj.transform.position == position);
     }
 
     public Vector2? DeserializeLevelObject(LevelObject obj, out GameObject gameObject, out Tile tile)
