@@ -37,7 +37,7 @@ public class Player : MechanicBehaviour
         spawn = rigidbody.position;
         respawning = false;
 
-        pauseCanvas = pauseCanvas ?? GetComponentInChildren<Canvas>();
+        pauseCanvas ??= GetComponentInChildren<Canvas>();
         if (pauseCanvas)
         {
             pauseCanvas.gameObject.SetActive(false);
