@@ -14,6 +14,7 @@ public class LevelSerializer : ScriptableObject
         serializer.objectMap.TrimExcess();
         serializer.tileMap = map.tileMap;
         serializer.tileMap.TrimExcess();
+        serializer.levelObjects = new List<LevelObject>();
         serializer.name = name;
         return serializer;
     }
@@ -142,6 +143,25 @@ public class LevelSerializer : ScriptableObject
     public void AddTile(Tile tile)
     {
         AddLevelObject(SerializeTile(tile));
+    }
+
+    public Vector2? DeserializeLevelObject(LevelObject obj, out GameObject gameObject, out Tile tile)
+    {
+        if (obj.isTile) // tile
+        {
+            gameObject = null;
+            tile = tileMap[obj.type];
+            return obj.transform.position;
+        }
+        else // game object
+        {
+            tile = null;
+            gameObject = Instantiate(objectMap[obj.type]);
+            gameObject.transform.position = obj.transform.position;
+            gameObject.transform.rotation = Quaternion.Euler(0f, 0f, obj.transform.rotation);
+            gameObject.transform.localScale = obj.transform.scale;
+            return null;
+        }
     }
 
     [Space(20f)]

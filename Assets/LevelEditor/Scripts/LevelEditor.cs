@@ -201,13 +201,37 @@ public class LevelEditor : MonoBehaviour
         output = Newtonsoft.Json.JsonConvert.SerializeObject(serializer.GetObjects(), new Newtonsoft.Json.JsonSerializerSettings {
             ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
         });
+        print(output);
     }
-#if DEBUG
-    public void DebugExport()
+
+    public void ExportToFile()
     {
         string output;
         Export(out output);
-        print(output);
+
+        string path = UnityEditor.EditorUtility.SaveFilePanel("Export Level", "", "level", "lvl");
+        System.IO.File.WriteAllText(path, output);
     }
-#endif
+    public void Import(in string input)
+    {
+        serializer.ImportObjects(Newtonsoft.Json.JsonConvert.DeserializeObject<List<LevelObject>>(input));
+        foreach (LevelObject obj in serializer.GetObjects())
+        {
+            Tile tile;
+            Vector2? tilePos = serializer.DeserializeLevelObject(obj, out _, out tile);
+            if (tilePos != null)
+            {
+                Vector3Int pos = new Vector3Int();
+                pos.x = (int)tilePos.Value.x;
+                pos.y = (int)tilePos.Value.y;
+                tilemap.SetTile(pos, tile);
+            }
+        }
+    }
+    public void ImportFromFile()
+    {
+        string path = UnityEditor.EditorUtility.OpenFilePanel("Import Level", "", "lvl");
+        string input = System.IO.File.ReadAllText(path);
+        Import(in input);
+    }
 }
