@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class LevelEditor : MonoBehaviour
 {
+    public static bool editing;
+
     [System.Serializable]
     public class SelectableObject
     {
@@ -43,9 +46,27 @@ public class LevelEditor : MonoBehaviour
     {
         selectedObject = newObject;
     }
+    private Button selectedButton;
+    public void SelectNewObjectFromButton(SelectableObject newObject, Button button)
+    {
+        if (selectedButton)
+        {
+            selectedButton.interactable = true;
+        }
+        SelectNewObject(newObject);
+        if (button)
+        {
+            button.interactable = false;
+        }
+        selectedButton = button;
+    }
     public void SelectNewGameObject(GameObject newGameObject) => SelectNewObject(newGameObject);
     public void SelectNewTile(Tile newTile) => SelectNewObject(newTile);
+    public void SelectNewGameObjectFromButton(GameObject newGameObject, Button button) => SelectNewObjectFromButton(newGameObject, button);
+    public void SelectNewTileFromButton(Tile newTile, Button button) => SelectNewObjectFromButton(newTile, button);
     public RectTransform deadZone;
+    [SerializeField]
+    private bool canEdit;
 
     public LevelSerializer serializer;
 
@@ -63,6 +84,11 @@ public class LevelEditor : MonoBehaviour
         validate(serializer, nameof(serializer));
 
         print(selectedObject.GetCurrentType());
+        if (!selectedObject)
+        {
+            selectedButton = null;
+        }
+        canEdit = false;
     }
 
     // Update is called once per frame
@@ -70,76 +96,98 @@ public class LevelEditor : MonoBehaviour
     {
         if (Input.GetButtonUp("Cancel"))
         {
-            SelectNewObject(null);
+            SelectNewObjectFromButton(null, null);
         }
         try
         {
-            if (RectTransformUtility.RectangleContainsScreenPoint(deadZone, Input.mousePosition, Camera.current))
-            {
-                return;
-            }
+            canEdit = !RectTransformUtility.RectangleContainsScreenPoint(deadZone, Input.mousePosition, Camera.main);
         }
         catch (System.Exception e)
         {
             Debug.LogException(e);
+            canEdit = false;
         }
         finally
         {
-            if (Input.GetMouseButtonUp(0) && selectedObject)
+            if (canEdit)
             {
-                try
+                if (Input.GetMouseButtonUp(0) && selectedObject)
                 {
-                    print($"Mouse Position: {Input.mousePosition}");
-                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    System.Type selectedType = selectedObject.GetCurrentType();
-                    print($"World Point: {worldPoint}");
-                    if (selectedType == typeof(Tile))
-                    {
-                        Vector3Int tilePoint = tilemap.WorldToCell(worldPoint);
-                        print($"Tile Point: {tilePoint}");
-                        tilemap.SetTile(tilePoint, selectedObject);
-                        print("Tile placed Successfully");
-                    }
-                    else if (selectedType == typeof(GameObject))
-                    {
-                        GameObject go = Instantiate((GameObject)selectedObject);
-                        go.transform.position = new Vector3(Mathf.Floor(worldPoint.x) + 0.5f, Mathf.Floor(worldPoint.y) + 0.5f);
-                    }
+                    PlaceSelectedObject();
                 }
-                catch (System.NullReferenceException e)
+                else if (Input.GetMouseButtonUp(1))
                 {
-                    Debug.LogException(e, this);
-                }
-            }
-            else if (Input.GetMouseButtonUp(1))
-            {
-                try
-                {
-                    print($"Mouse Position: {Input.mousePosition}");
-                    Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    print($"World Point: {worldPoint}");
-
-                    Vector3Int tilePoint = tilemap.WorldToCell(worldPoint);
-                    print($"Tile Point: {tilePoint}");
-                    tilemap.SetTile(tilePoint, null);
-                    print("Tile removed Successfully");
-
-                    RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector3.one, 1f);
-                    if (hit.collider)
-                    {
-                        Destroy(hit.collider.gameObject);
-                    }
-                }
-                catch (System.NullReferenceException e)
-                {
-                    Debug.LogException(e, this);
+                    DeleteObjects();
                 }
             }
         }
     }
 
-    public void Export(out Texture2D output)
+    private void OnEnable()
     {
-        throw new System.NotImplementedException();
+        editing = true;
+    }
+    private void OnDisable()
+    {
+        editing = false;
+    }
+
+    public void PlaceSelectedObject()
+    {
+        try
+        {
+            print($"Mouse Position: {Input.mousePosition}");
+            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            System.Type selectedType = selectedObject.GetCurrentType();
+            print($"World Point: {worldPoint}");
+            DeleteObjects();
+            if (selectedType == typeof(Tile))
+            {
+                Vector3Int tilePoint = tilemap.WorldToCell(worldPoint);
+                print($"Tile Point: {tilePoint}");
+                tilemap.SetTile(tilePoint, selectedObject);
+                serializer.AddTile(tilemap.GetTile<Tile>(tilePoint));
+                print("Tile placed Successfully");
+            }
+            else if (selectedType == typeof(GameObject))
+            {
+                GameObject go = Instantiate((GameObject)selectedObject);
+                go.transform.position = new Vector3(Mathf.Floor(worldPoint.x) + 0.5f, Mathf.Floor(worldPoint.y) + 0.5f);
+                serializer.AddGameObject(go);
+            }
+        }
+        catch (System.NullReferenceException e)
+        {
+            Debug.LogException(e, this);
+        }
+    }
+    public void DeleteObjects()
+    {
+        try
+        {
+            print($"Mouse Position: {Input.mousePosition}");
+            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            print($"World Point: {worldPoint}");
+
+            Vector3Int tilePoint = tilemap.WorldToCell(worldPoint);
+            print($"Tile Point: {tilePoint}");
+            tilemap.SetTile(tilePoint, null);
+            print("Tile removed Successfully");
+
+            RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector3.one, 1f);
+            if (hit.collider)
+            {
+                Destroy(hit.collider.gameObject);
+            }
+        }
+        catch (System.NullReferenceException e)
+        {
+            Debug.LogException(e, this);
+        }
+    }
+
+    public void Export(out string output)
+    {
+        output = Newtonsoft.Json.JsonConvert.SerializeObject(serializer.GetObjects());
     }
 }

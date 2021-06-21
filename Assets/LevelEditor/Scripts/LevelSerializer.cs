@@ -65,6 +65,22 @@ public class LevelSerializer : ScriptableObject
     {
         levelObjects.RemoveAt(FindIndex(tile));
     }
+    public void AddLevelObject(LevelObject obj)
+    {
+        levelObjects.Add(obj);
+    }
+    public void AddGameObject(GameObject gameObject)
+    {
+        AddLevelObject(SerializeGameObject(gameObject));
+    }
+    public void AddTile(Tile tile)
+    {
+        AddLevelObject(SerializeTile(tile));
+    }
+
     [SerializeField]
     private List<LevelObject> levelObjects;
+    public List<LevelObject> GetObjects() => levelObjects;
+    public void ExportObjects(LevelObject[] levelObjects) => this.levelObjects.CopyTo(levelObjects);
+    public void ImportObjects(IEnumerable<LevelObject> levelObjects) => this.levelObjects = new List<LevelObject>(levelObjects);
 }

@@ -28,6 +28,11 @@ public class EntanglableObject : ResettableMonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (LevelEditor.editing)
+        {
+            return;
+        }
+
         movement = rigidbody.position - prevPos;
         if ((Input.GetButtonUp(ExitEntanglementButton) || resetting) && entangled)
         {
