@@ -29,12 +29,12 @@ public class Player : MechanicBehaviour
     public Canvas finishCanvas;
     bool paused;
 
-    public new Rigidbody2D rigidbody => GetComponent<Rigidbody2D>();
+    public Rigidbody2D Rigidbody => GetComponent<Rigidbody2D>();
 
     // Start is called before the first frame update
     void Start()
     {
-        spawn = rigidbody.position;
+        spawn = Rigidbody.position;
         respawning = false;
 
         pauseCanvas ??= GetComponentInChildren<Canvas>();
@@ -64,19 +64,19 @@ public class Player : MechanicBehaviour
     {
         if (paused)
         {
-            rigidbody.velocity = Vector2.zero;
+            Rigidbody.velocity = Vector2.zero;
             return;
         }
         if (respawning)
         {
-            rigidbody.MovePosition(spawn);
-            rigidbody.velocity = Vector2.zero;
+            Rigidbody.MovePosition(spawn);
+            Rigidbody.velocity = Vector2.zero;
             EntanglableObject.ResetEntanglement();
             respawning = false;
             return;
         }
         movement = new Vector2(Input.GetAxisRaw(HorizontalAxisName), Input.GetAxisRaw(VerticalAxisName)) * speed;
-        rigidbody.velocity = movement;
+        Rigidbody.velocity = movement;
         
         Animate(movement);
     }

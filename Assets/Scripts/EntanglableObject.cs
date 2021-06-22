@@ -94,7 +94,7 @@ public class EntanglableObject : ResettableMonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        if (Vector2.Distance(rigidbody.position, Player.Main.rigidbody.position) > 5)
+        if (Vector2.Distance(rigidbody.position, Player.Main.Rigidbody.position) > 5)
         {
             return;
         }
