@@ -21,4 +21,11 @@ public static class Utils
         index = System.Array.IndexOf(values, value);
         return keys[index];
     }
+    public static void validate(this MonoBehaviour behaviour, Object obj, string name)
+    {
+        if (!obj)
+        {
+            throw new System.ArgumentNullException(name);
+        }
+    }
 }

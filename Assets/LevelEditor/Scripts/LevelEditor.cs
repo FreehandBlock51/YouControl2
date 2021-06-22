@@ -74,15 +74,8 @@ public class LevelEditor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        void validate(Object obj, string name)
-        {
-            if (!obj)
-            {
-                throw new System.ArgumentNullException(name);
-            }
-        }
-        validate(tilemap, nameof(tilemap));
-        validate(map, nameof(map));
+        this.validate(tilemap, nameof(tilemap));
+        this.validate(map, nameof(map));
         serializer = LevelSerializer.FromMappings(map);
 
         print(selectedObject.GetCurrentType());
