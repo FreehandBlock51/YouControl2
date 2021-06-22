@@ -17,9 +17,9 @@ public class EntanglableObject : ResettableMonoBehaviour
     public bool isMoving;
 
     // Start is called before the first frame update
-    protected override void OnEnable()
+    protected override void Start()
     {
-        base.OnEnable();
+        base.Start();
         entangled = false;
         isMoving = false;
         StartCoroutine(ColorChange());

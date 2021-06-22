@@ -93,7 +93,7 @@ public class Player : MechanicBehaviour
     public void LoadMainMenu()
     {
         ResetLevel();
-        MenuManager.LoadScene(0);
+        SceneManager.LoadScene(0);
     }
     public void TogglePauseScreen()
     {

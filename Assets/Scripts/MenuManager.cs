@@ -27,7 +27,27 @@ public class MenuManager : MonoBehaviour
 
     public static void LoadScene(int buildIndex)
     {
-        SceneManager.LoadScene(buildIndex + 1, LoadSceneMode.Single);
+        SceneManager.LoadScene(buildIndex + 2, LoadSceneMode.Single);
+    }
+
+    public void PlayUserLevel() => PlayLevelFile();
+    public static void PlayLevelFile(string path = default)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
+            SimpleFileBrowser.FileBrowser.ShowLoadDialog((paths) => PlayLevelFile(paths[0]), () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, title: "Import Level", loadButtonText: "Import");
+        }
+        else
+        {
+            LevelPlayer.FilePath = path;
+            LoadScene(0);
+        }
+    }
+    public static void PlayLevel(string raw)
+    {
+        LevelPlayer.RawData = raw;
+        LoadScene(0);
     }
 }
 

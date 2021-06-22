@@ -21,7 +21,7 @@ public class LevelPlayer : MonoBehaviour
                 return _raw;
             }
         }
-        set
+        internal set
         {
             _raw = value;
             FilePath = null;
