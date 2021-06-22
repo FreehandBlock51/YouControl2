@@ -209,8 +209,9 @@ public class LevelEditor : MonoBehaviour
         string output;
         Export(out output);
 
-        string path = UnityEditor.EditorUtility.SaveFilePanel("Export Level", "", "level", "lvl");
-        System.IO.File.WriteAllText(path, output);
+        SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
+        SimpleFileBrowser.FileBrowser.ShowSaveDialog((string[] paths) => System.IO.File.WriteAllText(paths[0], output),
+            () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, title:"Export Level", saveButtonText:"Export");
     }
     public void Import(in string input)
     {
@@ -230,8 +231,10 @@ public class LevelEditor : MonoBehaviour
     }
     public void ImportFromFile()
     {
-        string path = UnityEditor.EditorUtility.OpenFilePanel("Import Level", "", "lvl");
-        string input = System.IO.File.ReadAllText(path);
-        Import(in input);
+        SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
+        SimpleFileBrowser.FileBrowser.ShowLoadDialog((string[] paths) => Import(System.IO.File.ReadAllText(paths[0])),
+            () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, initialFilename:"*.lvl", title:"Import Level", loadButtonText:"Import");
     }
+
+    public void BackToMainMenu() => UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 }

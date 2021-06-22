@@ -81,6 +81,7 @@ public class LevelSerializer : ScriptableObject
         }
         catch (System.NullReferenceException e)
         {
+            Debug.LogException(e, this);
             return -1;
         }
     }
