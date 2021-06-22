@@ -31,7 +31,17 @@ public class LevelEditor : MonoBehaviour
                 return null;
             }
         }
-        public static implicit operator bool(SelectableObject obj) => obj.GetCurrentType() != null;
+        public static implicit operator bool(SelectableObject obj)
+        {
+            try
+            {
+                return obj.GetCurrentType() != null;
+            }
+            catch (System.NullReferenceException)
+            {
+                return false;
+            }
+        }
 
         public static implicit operator Tile(SelectableObject obj) => obj.tile;
         public static implicit operator SelectableObject(Tile tile) => new SelectableObject { tile=tile };
@@ -135,17 +145,17 @@ public class LevelEditor : MonoBehaviour
         }
         try
         {
+            DeleteObjects();
             print($"Mouse Position: {Input.mousePosition}");
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            System.Type selectedType = selectedObject.GetCurrentType();
             print($"World Point: {worldPoint}");
-            DeleteObjects();
+            System.Type selectedType = selectedObject.GetCurrentType();
             if (selectedType == typeof(Tile))
             {
                 Vector3Int tilePoint = tilemap.WorldToCell(worldPoint);
                 print($"Tile Point: {tilePoint}");
+                serializer.AddTile(selectedObject, tilePoint);
                 tilemap.SetTile(tilePoint, selectedObject);
-                serializer.AddTile(tilemap.GetTile<Tile>(tilePoint));
                 print("Tile placed Successfully");
             }
             else if (selectedType == typeof(GameObject))
@@ -227,15 +237,27 @@ public class LevelEditor : MonoBehaviour
 
     public static void Import(string input, LevelSerializer serializer, Tilemap tilemap)
     {
-        serializer.ImportObjects(Newtonsoft.Json.JsonConvert.DeserializeObject<List<LevelObject>>(input));
-        foreach (LevelObject obj in serializer.GetObjects())
+        if (!string.IsNullOrEmpty(input))
         {
+            serializer.ImportObjects(Newtonsoft.Json.JsonConvert.DeserializeObject<List<LevelObject>>(input));
+        }
+        int len = serializer.GetObjects().Count;
+        print(len);
+        LevelObject[] levelObjects = new LevelObject[len];
+        serializer.ExportObjects(levelObjects);
+        print(levelObjects.LongLength);
+        for (long i = 0; i < levelObjects.LongLength; i++)
+        {
+            LevelObject obj = levelObjects[i];
+            print(obj);
             Vector2? tilePos = serializer.DeserializeLevelObject(obj, out _, out Tile tile);
+            print($"tile: {tile}");
             if (tilePos != null)
             {
                 Vector3Int pos = new Vector3Int();
                 pos.x = (int)tilePos.Value.x;
                 pos.y = (int)tilePos.Value.y;
+                print($"placing tile {tile} at {tilePos} [{pos}]");
                 tilemap.SetTile(pos, tile);
             }
         }
@@ -243,16 +265,10 @@ public class LevelEditor : MonoBehaviour
     public void ImportFromFile()
     {
         SelectNewObjectFromButton(null, null);
+        tilemap.ClearAllTiles();
         foreach (LevelObject obj in serializer.GetObjects())
         {
-            if (obj.isTile)
-            {
-                Vector3Int tilePos = new Vector3Int();
-                tilePos.x = (int)obj.transform.position.x;
-                tilePos.y = (int)obj.transform.position.y;
-                tilemap.SetTile(tilePos, null);
-            }
-            else
+            if (!obj.isTile)
             {
                 foreach (RaycastHit2D hit in Physics2D.RaycastAll(obj.transform.position, Vector2.one, 0f))
                 {
@@ -266,7 +282,7 @@ public class LevelEditor : MonoBehaviour
     {
         SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
         SimpleFileBrowser.FileBrowser.ShowLoadDialog((string[] paths) => Import(System.IO.File.ReadAllText(paths[0]), serializer, tilemap),
-            () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, initialFilename:"*.lvl", title:"Import Level", loadButtonText:"Import");
+            () => Import(null, serializer, tilemap), SimpleFileBrowser.FileBrowser.PickMode.Files, initialFilename:"*.lvl", title:"Import Level", loadButtonText:"Import");
     }
 
     public void BackToMainMenu() => UnityEngine.SceneManagement.SceneManager.LoadScene(0);

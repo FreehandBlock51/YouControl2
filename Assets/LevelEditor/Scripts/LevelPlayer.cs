@@ -28,7 +28,7 @@ public class LevelPlayer : MonoBehaviour
         }
     }
 
-    [SerializeField]
+    public LevelSerializer map;
     private LevelSerializer serializer;
     [SerializeField]
     private Tilemap tilemap;
@@ -36,9 +36,10 @@ public class LevelPlayer : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        this.validate(serializer, nameof(serializer));
+        this.validate(map, nameof(map));
         this.validate(tilemap, nameof(tilemap));
-        LevelEditor.Import(RawData, serializer, tilemap);
+        serializer = LevelSerializer.FromMappings(map);
+        LevelEditor.Import(RawData, map, tilemap);
     }
 
     // Update is called once per frame

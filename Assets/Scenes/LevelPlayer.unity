@@ -559,7 +559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8898a76cbbbacc44794db2086e109081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializer: {fileID: 11400000, guid: 08e832dab23db7c4cb7626c66513d89e, type: 2}
+  map: {fileID: 11400000, guid: 08e832dab23db7c4cb7626c66513d89e, type: 2}
   tilemap: {fileID: 423127295}
 --- !u!4 &1367254912
 Transform:

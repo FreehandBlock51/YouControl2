@@ -6,8 +6,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(menuName = "Level Editor/Level Serializer")]
 public class LevelSerializer : ScriptableObject
 {
-    public static LevelSerializer FromMappings(LevelSerializer map) => FromMappings(map, map.name);
-    public static LevelSerializer FromMappings(LevelSerializer map, string name)
+    public static LevelSerializer FromMappings(LevelSerializer map)
     {
         LevelSerializer serializer = CreateInstance<LevelSerializer>();
         serializer.objectMap = map.objectMap;
@@ -15,7 +14,6 @@ public class LevelSerializer : ScriptableObject
         serializer.tileMap = map.tileMap;
         serializer.tileMap.TrimExcess();
         serializer.levelObjects = new List<LevelObject>();
-        serializer.name = name;
         return serializer;
     }
 
@@ -28,12 +26,6 @@ public class LevelSerializer : ScriptableObject
 
     public LevelObject SerializeGameObject(GameObject gameObject)
     {
-        int index = FindIndex(gameObject);
-        if (index >= 0)
-        {
-            return levelObjects[index];
-        }
-
         return new LevelObject()
         {
             hash = gameObject.GetHashCode(),
@@ -56,19 +48,13 @@ public class LevelSerializer : ScriptableObject
             return -1;
         }
     }
-    public LevelObject SerializeTile(Tile tile)
+    public LevelObject SerializeTile(Tile tile, Vector3Int tilePosition)
     {
-        int index = FindIndex(tile);
-        if (index >= 0)
-        {
-            return levelObjects[index];
-        }
-
         return new LevelObject
         {
             hash = tile.GetHashCode(),
             isTile = true,
-            transform = new LevelData.PositionData(tile.gameObject.transform.position, 0f, Vector2.one),
+            transform = new LevelData.PositionData((Vector3)tilePosition, 0f, Vector2.one),
             other = null,
             type = tileMap.FindIndex((Tile tile1) => tile1.sprite == tile.sprite)
         };
@@ -141,9 +127,9 @@ public class LevelSerializer : ScriptableObject
     {
         AddLevelObject(SerializeGameObject(gameObject));
     }
-    public void AddTile(Tile tile)
+    public void AddTile(Tile tile, Vector3Int tilePosition)
     {
-        AddLevelObject(SerializeTile(tile));
+        AddLevelObject(SerializeTile(tile, tilePosition));
     }
     public void RemoveGameObjectAtPosition(Vector2 position)
     {
@@ -178,6 +164,7 @@ public class LevelSerializer : ScriptableObject
     [SerializeField]
     private List<LevelObject> levelObjects;
     public List<LevelObject> GetObjects() => levelObjects;
+    public void ClearObjects() => levelObjects.Clear();
     public void ExportObjects(LevelObject[] levelObjects) => this.levelObjects.CopyTo(levelObjects);
     public void ImportObjects(IEnumerable<LevelObject> levelObjects) => this.levelObjects = new List<LevelObject>(levelObjects);
 }
