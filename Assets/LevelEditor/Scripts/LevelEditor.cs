@@ -212,13 +212,15 @@ public class LevelEditor : MonoBehaviour
         print(output);
         return output;
     }
-
     public void ExportToFile()
     {
-        string output;
-        Export(out output);
-
         SelectNewObjectFromButton(null, null);
+        ExportToFile(serializer);
+    }
+    public static void ExportToFile(LevelSerializer serializer)
+    {
+        string output = Export(serializer);
+
         SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
         SimpleFileBrowser.FileBrowser.ShowSaveDialog((string[] paths) => System.IO.File.WriteAllText(paths[0], output),
             () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, title:"Export Level", saveButtonText:"Export");
@@ -249,8 +251,12 @@ public class LevelEditor : MonoBehaviour
     public void ImportFromFile()
     {
         SelectNewObjectFromButton(null, null);
+        ImportFromFile(serializer, tilemap);
+    }
+    public static void ImportFromFile(LevelSerializer serializer, Tilemap tilemap)
+    {
         SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
-        SimpleFileBrowser.FileBrowser.ShowLoadDialog((string[] paths) => Import(System.IO.File.ReadAllText(paths[0])),
+        SimpleFileBrowser.FileBrowser.ShowLoadDialog((string[] paths) => Import(System.IO.File.ReadAllText(paths[0]), serializer, tilemap),
             () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, initialFilename:"*.lvl", title:"Import Level", loadButtonText:"Import");
     }
 
