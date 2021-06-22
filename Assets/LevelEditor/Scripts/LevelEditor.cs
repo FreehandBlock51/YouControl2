@@ -180,7 +180,7 @@ public class LevelEditor : MonoBehaviour
             print("Tile removed Successfully");
 
             serializer.RemoveGameObjectAtPosition(new Vector2(Mathf.Floor(worldPoint.x) + 0.5f, Mathf.Floor(worldPoint.y) + 0.5f));
-            RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector3.one, 1f);
+            RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector3.one, 0f);
             if (hit.collider)
             {
                 Destroy(hit.collider.gameObject);
@@ -230,8 +230,7 @@ public class LevelEditor : MonoBehaviour
         serializer.ImportObjects(Newtonsoft.Json.JsonConvert.DeserializeObject<List<LevelObject>>(input));
         foreach (LevelObject obj in serializer.GetObjects())
         {
-            Tile tile;
-            Vector2? tilePos = serializer.DeserializeLevelObject(obj, out _, out tile);
+            Vector2? tilePos = serializer.DeserializeLevelObject(obj, out _, out Tile tile);
             if (tilePos != null)
             {
                 Vector3Int pos = new Vector3Int();
@@ -244,6 +243,23 @@ public class LevelEditor : MonoBehaviour
     public void ImportFromFile()
     {
         SelectNewObjectFromButton(null, null);
+        foreach (LevelObject obj in serializer.GetObjects())
+        {
+            if (obj.isTile)
+            {
+                Vector3Int tilePos = new Vector3Int();
+                tilePos.x = (int)obj.transform.position.x;
+                tilePos.y = (int)obj.transform.position.y;
+                tilemap.SetTile(tilePos, null);
+            }
+            else
+            {
+                foreach (RaycastHit2D hit in Physics2D.RaycastAll(obj.transform.position, Vector2.one, 0f))
+                {
+                    Destroy(hit.collider.gameObject);
+                }
+            }
+        }
         ImportFromFile(serializer, tilemap);
     }
     public static void ImportFromFile(LevelSerializer serializer, Tilemap tilemap)
