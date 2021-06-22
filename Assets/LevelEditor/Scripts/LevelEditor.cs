@@ -136,6 +136,10 @@ public class LevelEditor : MonoBehaviour
 
     public void PlaceSelectedObject()
     {
+        if (selectedObject == null)
+        {
+            return;
+        }
         try
         {
             print($"Mouse Position: {Input.mousePosition}");
@@ -198,10 +202,15 @@ public class LevelEditor : MonoBehaviour
 
     public void Export(out string output)
     {
-        output = Newtonsoft.Json.JsonConvert.SerializeObject(serializer.GetObjects(), new Newtonsoft.Json.JsonSerializerSettings {
+        output = Export(serializer);
+    }
+    public static string Export(LevelSerializer serializer)
+    {
+        string output = Newtonsoft.Json.JsonConvert.SerializeObject(serializer.GetObjects(), new Newtonsoft.Json.JsonSerializerSettings {
             ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
         });
         print(output);
+        return output;
     }
 
     public void ExportToFile()
@@ -209,11 +218,19 @@ public class LevelEditor : MonoBehaviour
         string output;
         Export(out output);
 
+        SelectNewObjectFromButton(null, null);
         SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
         SimpleFileBrowser.FileBrowser.ShowSaveDialog((string[] paths) => System.IO.File.WriteAllText(paths[0], output),
             () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, title:"Export Level", saveButtonText:"Export");
     }
+
     public void Import(in string input)
+    {
+
+        Import(input, serializer, tilemap);
+    }
+
+    public static void Import(string input, LevelSerializer serializer, Tilemap tilemap)
     {
         serializer.ImportObjects(Newtonsoft.Json.JsonConvert.DeserializeObject<List<LevelObject>>(input));
         foreach (LevelObject obj in serializer.GetObjects())
@@ -231,6 +248,7 @@ public class LevelEditor : MonoBehaviour
     }
     public void ImportFromFile()
     {
+        SelectNewObjectFromButton(null, null);
         SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
         SimpleFileBrowser.FileBrowser.ShowLoadDialog((string[] paths) => Import(System.IO.File.ReadAllText(paths[0])),
             () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, initialFilename:"*.lvl", title:"Import Level", loadButtonText:"Import");
