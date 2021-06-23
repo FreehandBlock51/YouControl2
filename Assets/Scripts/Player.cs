@@ -106,8 +106,26 @@ public class Player : MechanicBehaviour
         pauseCanvas.gameObject.SetActive(paused);
     }
 
+    public static bool speedrunning = false;
+    public static void ChangeMode(UnityEngine.UI.Toggle toggle) => speedrunning = toggle.isOn;
+
     public void Finish()
     {
+        if (speedrunning)
+        {
+            int nextLevel = SceneManager.GetActiveScene().buildIndex + 1;
+            try
+            {
+                if (SceneManager.GetSceneByBuildIndex(nextLevel) != null)
+                {
+                    SceneManager.LoadScene(nextLevel);
+                }
+            }
+            catch
+            {
+                // continue normally
+            }
+        }
         SetPauseState(true);
         int maxLevel = SceneManager.GetActiveScene().buildIndex - 3;
         if (maxLevel >= 0 && maxLevel > PlayerPrefs.GetInt("Progress", -1))
