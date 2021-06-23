@@ -8,7 +8,14 @@ public class MenuManager : MonoBehaviour
     public GameObject LevelSelectPanel;
     public GameObject MainMenuPanel;
 
-    private void Awake() => LoadMainMenu();
+    private void Start()
+    {
+        LoadMainMenu();
+        foreach (ChapterButton button in GetComponentsInChildren<ChapterButton>(true))
+        {
+            button.panel.SetActive(false);
+        }
+    }
 
     public void LoadLevelSelect()
     {

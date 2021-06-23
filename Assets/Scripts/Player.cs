@@ -109,6 +109,11 @@ public class Player : MechanicBehaviour
     public void Finish()
     {
         SetPauseState(true);
+        int maxLevel = SceneManager.GetActiveScene().buildIndex - 3;
+        if (maxLevel >= 0 && maxLevel > PlayerPrefs.GetInt("Progress", -1))
+        {
+            PlayerPrefs.SetInt("Progress", maxLevel);
+        }
         HUDCanvas.gameObject.SetActive(false);
         finishCanvas.gameObject.SetActive(true);
     }
