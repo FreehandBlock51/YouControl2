@@ -17,9 +17,9 @@ public class EntanglableObject : ResettableMonoBehaviour
     public bool isMoving;
 
     // Start is called before the first frame update
-    protected override void OnEnable()
+    protected override void Start()
     {
-        base.OnEnable();
+        base.Start();
         entangled = false;
         isMoving = false;
         StartCoroutine(ColorChange());
@@ -28,6 +28,11 @@ public class EntanglableObject : ResettableMonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (LevelEditor.editing)
+        {
+            return;
+        }
+
         movement = rigidbody.position - prevPos;
         if ((Input.GetButtonUp(ExitEntanglementButton) || resetting) && entangled)
         {
@@ -89,7 +94,7 @@ public class EntanglableObject : ResettableMonoBehaviour
 
     private void OnMouseUpAsButton()
     {
-        if (Vector2.Distance(rigidbody.position, Player.Main.rigidbody.position) > 5)
+        if (Vector2.Distance(rigidbody.position, Player.Main.Rigidbody.position) > 5)
         {
             return;
         }

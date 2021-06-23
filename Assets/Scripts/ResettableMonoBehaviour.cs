@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class ResettableMonoBehaviour : MonoBehaviour
+public class ResettableMonoBehaviour : MechanicBehaviour
 {
     Vector2 startPos;
 
-    protected virtual void OnEnable()
+    protected virtual void Start()
     {
         startPos = GetComponent<Rigidbody2D>().position;
     }

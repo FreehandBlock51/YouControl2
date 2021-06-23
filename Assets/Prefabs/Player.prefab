@@ -468,9 +468,9 @@ GameObject:
   - component: {fileID: 4732787822123484447}
   - component: {fileID: 4732787822123484444}
   - component: {fileID: 4732787822123484434}
-  - component: {fileID: 535349043284368085}
   - component: {fileID: 4732787822123484441}
   - component: {fileID: 4732787822123484446}
+  - component: {fileID: 4271890340639942622}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -536,7 +536,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5285154485733503381, guid: 8e9cf81a196a84b41b4a237c40f8fd80, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d4231dadd1673bc49a8fbe3cec8003d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -568,22 +568,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!70 &535349043284368085
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4732787822123484435}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.018210202, y: -0.018210173}
-  m_Size: {x: 0.83610827, y: 0.87252855}
-  m_Direction: 0
 --- !u!95 &4732787822123484441
 Animator:
   serializedVersion: 3
@@ -594,7 +578,7 @@ Animator:
   m_GameObject: {fileID: 4732787822123484435}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6f9147a5135ac9f49bdb093b665934f0, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -622,6 +606,22 @@ MonoBehaviour:
   pauseCanvas: {fileID: 5088289085934619782}
   HUDCanvas: {fileID: 7433031235807461382}
   finishCanvas: {fileID: 5485434221467315296}
+--- !u!70 &4271890340639942622
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4732787822123484435}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.018704772, y: -0.0037362278}
+  m_Size: {x: 0.80463886, y: 0.932748}
+  m_Direction: 0
 --- !u!1 &6076776798818562244
 GameObject:
   m_ObjectHideFlags: 0
