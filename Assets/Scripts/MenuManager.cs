@@ -43,7 +43,7 @@ public class MenuManager : MonoBehaviour
         if (string.IsNullOrEmpty(path))
         {
             SimpleFileBrowser.FileBrowser.SetFilters(false, new SimpleFileBrowser.FileBrowser.Filter("Level Files", ".lvl"));
-            SimpleFileBrowser.FileBrowser.ShowLoadDialog((paths) => PlayLevelFile(paths[0]), () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, title: "Import Level", loadButtonText: "Import");
+            SimpleFileBrowser.FileBrowser.ShowLoadDialog((paths) => PlayLevelFile(paths[0]), () => { }, SimpleFileBrowser.FileBrowser.PickMode.Files, title: "Select Level", loadButtonText: "Play");
         }
         else
         {
