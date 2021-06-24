@@ -31,6 +31,10 @@ public class Player : MechanicBehaviour
 
     public Rigidbody2D Rigidbody => GetComponent<Rigidbody2D>();
 
+    private static System.Diagnostics.Stopwatch stopwatch = null;
+    public UnityEngine.UI.Text timerText;
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +54,21 @@ public class Player : MechanicBehaviour
         {
             finishCanvas.gameObject.SetActive(false);
         }
+
+        if (speedrunning)
+        {
+            if (stopwatch == null)
+            {
+                stopwatch = new System.Diagnostics.Stopwatch();
+            }
+            stopwatch.Start();
+        }
+        else
+        {
+            stopwatch = null;
+            timerText.gameObject.SetActive(false);
+        }
+
         paused = false;
     }
 
@@ -62,6 +81,10 @@ public class Player : MechanicBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (speedrunning)
+        {
+            timerText.text = string.Format(stopwatch.Elapsed.ToString("G"));
+        }
         if (paused)
         {
             Rigidbody.velocity = Vector2.zero;
@@ -103,6 +126,17 @@ public class Player : MechanicBehaviour
     public void SetPauseState(bool paused)
     {
         this.paused = paused;
+        if (speedrunning)
+        {
+            if (paused)
+            {
+                stopwatch.Stop();
+            }
+            else
+            {
+                stopwatch.Start();
+            }
+        }
         pauseCanvas.gameObject.SetActive(paused);
     }
 
@@ -118,12 +152,19 @@ public class Player : MechanicBehaviour
             {
                 if (SceneManager.GetSceneByBuildIndex(nextLevel) != null)
                 {
+                    ResetLevel();
                     SceneManager.LoadScene(nextLevel);
+                }
+                else
+                {
+                    speedrunning = false;
+                    stopwatch.Stop();
                 }
             }
             catch
             {
-                // continue normally
+                speedrunning = false;
+                stopwatch.Stop();
             }
         }
         SetPauseState(true);
@@ -134,6 +175,7 @@ public class Player : MechanicBehaviour
         }
         HUDCanvas.gameObject.SetActive(false);
         finishCanvas.gameObject.SetActive(true);
+        timerText.gameObject.SetActive(true);
     }
 
     public void ResetLevel()
