@@ -54,7 +54,7 @@ public class LevelEditor : MonoBehaviour
     private SelectableObject selectedObject;
 
     public RectTransform menu;
-    private bool inMenu = false;
+    public bool inMenu = false;
     public void SetMenuVisibility(bool active)
     {
         inMenu = active;
@@ -325,6 +325,7 @@ public class LevelEditor : MonoBehaviour
             }
         }
         ImportFromFile(serializer, tilemap);
+        SetMenuVisibility(false);
     }
     public static void ImportFromFile(LevelSerializer serializer, Tilemap tilemap)
     {

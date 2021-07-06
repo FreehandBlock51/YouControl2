@@ -7,6 +7,8 @@ public class CameraDrag : MonoBehaviour
 
     public Transform MovementAnchor;
 
+    public LevelEditor editor;
+
     private void Start()
     {
         if (!MovementAnchor)
@@ -19,6 +21,12 @@ public class CameraDrag : MonoBehaviour
 
     void Update()
     {
+        if (editor.inMenu)
+        {
+            MovementAnchor.gameObject.SetActive(false);
+            return;
+        }
+
         if (Input.GetMouseButtonDown(2))
         {
             dragOrigin = Input.mousePosition;
