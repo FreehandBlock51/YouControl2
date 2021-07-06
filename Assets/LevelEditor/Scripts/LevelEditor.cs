@@ -52,8 +52,22 @@ public class LevelEditor : MonoBehaviour
     public Tilemap tilemap;
     [SerializeField]
     private SelectableObject selectedObject;
+
+    public RectTransform menu;
+    private bool inMenu = false;
+    public void SetMenuVisibility(bool active)
+    {
+        inMenu = active;
+        menu.gameObject.SetActive(active);
+        HUDMenu.gameObject.SetActive(!active);
+    }
+
     public void SelectNewObject(SelectableObject newObject)
     {
+        if (deleting && newObject != null)
+        {
+            SetDeleting(false);
+        }
         selectedObject = newObject;
     }
     private Button selectedButton;
@@ -74,12 +88,32 @@ public class LevelEditor : MonoBehaviour
     public void SelectNewTile(Tile newTile) => SelectNewObject(newTile);
     public void SelectNewGameObjectFromButton(GameObject newGameObject, Button button) => SelectNewObjectFromButton(newGameObject, button);
     public void SelectNewTileFromButton(Tile newTile, Button button) => SelectNewObjectFromButton(newTile, button);
-    public RectTransform deadZone;
+    public RectTransform HUDMenu;
     [SerializeField]
     private bool canEdit;
 
     public LevelSerializer map;
     private LevelSerializer serializer;
+
+    [SerializeField]
+    private bool deleting = false;
+
+    public void SetDeleting(bool deleting)
+    {
+        if (deleting && selectedObject != null)
+        {
+            SelectNewObject(null);
+        }
+        this.deleting = deleting;
+    }
+
+    public void SetDeletingFromButton(bool deleting, Button button)
+    {
+        SelectNewObjectFromButton(null, button);
+        SetDeleting(deleting);
+    }
+    public void EnableDeletingFromButton(Button button) => SetDeletingFromButton(true, button);
+    public void DisableDeletingFromButton(Button button) => SetDeletingFromButton(false, button);
 
     // Start is called before the first frame update
     void Start()
@@ -87,6 +121,8 @@ public class LevelEditor : MonoBehaviour
         this.validate(tilemap, nameof(tilemap));
         this.validate(map, nameof(map));
         serializer = LevelSerializer.FromMappings(map);
+
+        SetMenuVisibility(inMenu);
 
         print(selectedObject.GetCurrentType());
         if (!selectedObject)
@@ -105,7 +141,7 @@ public class LevelEditor : MonoBehaviour
         }
         try
         {
-            canEdit = !RectTransformUtility.RectangleContainsScreenPoint(deadZone, Input.mousePosition, Camera.main);
+            canEdit = !RectTransformUtility.RectangleContainsScreenPoint(HUDMenu, Input.mousePosition, Camera.main);
         }
         catch (System.Exception e)
         {
@@ -114,11 +150,23 @@ public class LevelEditor : MonoBehaviour
         }
         finally
         {
+            canEdit = !inMenu && canEdit;
+            if (deleting)
+            {
+                SelectNewObjectFromButton(null, null);
+            }
             if (canEdit)
             {
-                if (Input.GetMouseButtonUp(0) && selectedObject)
+                if (Input.GetMouseButtonUp(0) && selectedObject && !deleting)
                 {
-                    PlaceSelectedObject();
+                    if (deleting)
+                    {
+                        DeleteObjects();
+                    }
+                    else if (selectedObject)
+                    {
+                        PlaceSelectedObject();
+                    }
                 }
                 else if (Input.GetMouseButtonUp(1))
                 {
